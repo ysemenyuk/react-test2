@@ -31,8 +31,6 @@ function NewsItemPage() {
     <Container>
       <Segment basic>
         <Button content='Back to all news' primary as={Link} to='/news' />
-      </Segment>
-      <Segment basic>
         {loading ? (
           <Loader active inline='centered' />
         ) : error ? (

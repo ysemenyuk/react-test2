@@ -44,4 +44,4 @@ function CommentsList({ comments, showReplies, onShowRepliesClick }) {
   );
 }
 
-export default CommentsList;
+export default React.memo(CommentsList);

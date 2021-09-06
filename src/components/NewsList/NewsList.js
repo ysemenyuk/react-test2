@@ -3,6 +3,7 @@ import { List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 function NewsList({ list }) {
+  console.log('list');
   return (
     <List divided relaxed>
       {list.map((item) => {
@@ -27,4 +28,4 @@ function NewsList({ list }) {
   );
 }
 
-export default NewsList;
+export default React.memo(NewsList);

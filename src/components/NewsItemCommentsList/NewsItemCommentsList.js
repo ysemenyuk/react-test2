@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { Button, Segment, Loader, Header, Message, Divider } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +19,9 @@ function NewsItemCommentsList({ parentId }) {
   const [showReplies, setShowReplies] = useState({});
 
   React.useEffect(() => {
-    dispatch(getCommentsList(parentId));
+    itemComments
+      ? dispatch(updateCommentsList(parentId))
+      : dispatch(getCommentsList(parentId));
   }, [dispatch, parentId]);
 
   React.useEffect(() => {

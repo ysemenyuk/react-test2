@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import avatar from '../../images/elliot.jpg';
 
-import { getComments } from '../../redux/actions/commentsActions';
+import { getComments, updateComments } from '../../redux/actions/commentsActions';
 
 function Comments({ parentId }) {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ function Comments({ parentId }) {
   const [showReplies, setShowReply] = useState({});
 
   React.useEffect(() => {
-    dispatch(getComments(parentId));
+    comments ? dispatch(updateComments(parentId)) : dispatch(getComments(parentId));
   }, []);
 
   const handleShowRepliesClick = (id) => () => {

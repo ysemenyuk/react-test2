@@ -10,13 +10,12 @@ function NewsItemDetails({ item }) {
         <Header.Content>{title}</Header.Content>
       </Header>
       <p>
-        <a href={url}>{url}</a>
+        url <a href={url}>{url}</a>
       </p>
-      <p>
-        by {by} at {new Date(time * 1000).toLocaleString()}
-      </p>
+      <p>by {by}</p>
+      <p>at {new Date(time * 1000).toLocaleString()}</p>
     </>
   );
 }
 
-export default NewsItemDetails;
+export default React.memo(NewsItemDetails);
