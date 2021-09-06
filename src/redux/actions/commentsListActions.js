@@ -26,7 +26,7 @@ const fetchComments = async (ids) => {
   return await Promise.all(ps);
 };
 
-export const getCommentsList = (id) => async (dispatch, getState) => {
+export const getCommentsList = (id) => async (dispatch) => {
   dispatch({
     type: COMMENTS_LIST_REQUEST,
     payload: { id },
@@ -35,14 +35,12 @@ export const getCommentsList = (id) => async (dispatch, getState) => {
   try {
     const newsItem = await apiService.fetchItem(id);
     const comments = await fetchComments(newsItem.kids);
-    console.log('getCommentsList', comments);
 
     dispatch({
       type: COMMENTS_LIST_SUCCESS,
       payload: { id, data: comments },
     });
   } catch (err) {
-    console.log('getCommentsList err', err);
     dispatch({
       type: COMMENTS_LIST_FAIL,
       payload: { id, err },
@@ -55,16 +53,14 @@ export const updateCommentsList = (id) => async (dispatch, getState) => {
     type: COMMENTS_LIST_UPDATE_REQUEST,
     payload: { id },
   });
+
   try {
     const newsItem = await apiService.fetchItem(id);
     const comments = await fetchComments(newsItem.kids);
-    // console.log('getCommentsList respComments', respComments);
 
     const existComments = getState().commentsList[id].data;
-    // console.log('getCommentsList existComments', existComments);
 
     const eq = _.isEqual(comments, existComments);
-    console.log('getCommentsList eq', eq);
 
     if (eq) {
       dispatch({
@@ -79,7 +75,6 @@ export const updateCommentsList = (id) => async (dispatch, getState) => {
       payload: { id, data: comments },
     });
   } catch (err) {
-    console.log('updateCommentsList err', err);
     dispatch({
       type: COMMENTS_LIST_UPDATE_FAIL,
       payload: { id, err },

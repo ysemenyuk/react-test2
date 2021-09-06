@@ -22,6 +22,11 @@ export const newsItemReducer = (state = initialState, action) => {
         error: action.payload,
         loading: false,
       };
+
+    case 'NEWS_ITEM_RESET':
+      return {
+        ...initialState,
+        };
     default:
       return state;
   }

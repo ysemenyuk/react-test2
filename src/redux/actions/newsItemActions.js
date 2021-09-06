@@ -10,17 +10,20 @@ export const getNewsItem = (id) => async (dispatch) => {
 
   try {
     const item = await apiService.fetchItem(id);
-    console.log('getCurrentItemitem', item);
-
     dispatch({
       type: NEWS_ITEM_SUCCESS,
       payload: item,
     });
   } catch (err) {
-    console.log('getCurrentItem err', err);
     dispatch({
       type: NEWS_ITEM_FAIL,
       payload: err,
     });
   }
+};
+
+export const resetNewsItem = () => {
+  return {
+    type: 'NEWS_ITEM_RESET',
+  };
 };

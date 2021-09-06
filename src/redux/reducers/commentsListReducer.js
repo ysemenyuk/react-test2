@@ -5,7 +5,7 @@ import {
   COMMENTS_LIST_UPDATE_REQUEST,
   COMMENTS_LIST_UPDATE_CANCEL,
   COMMENTS_LIST_UPDATE_SUCCESS,
-  // COMMENTS_LIST_UPDATE_FAIL,
+  COMMENTS_LIST_UPDATE_FAIL,
 } from '../actions/types';
 
 export const commentsListReducer = (state = {}, action) => {
@@ -14,6 +14,7 @@ export const commentsListReducer = (state = {}, action) => {
       return {
         ...state,
         [action.payload.id]: {
+          id: action.payload.id,
           error: null,
           loading: true,
           updating: false,
@@ -64,6 +65,14 @@ export const commentsListReducer = (state = {}, action) => {
           error: null,
           updating: false,
           data: action.payload.data,
+        },
+      };
+    case COMMENTS_LIST_UPDATE_FAIL:
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id],
+          updating: false,
         },
       };
     default:
