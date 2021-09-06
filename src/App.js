@@ -3,8 +3,8 @@ import './App.css';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import NewsList from './pages/NewsList';
-import NewsItem from './pages/NewsItem';
-// import NewsItem2 from './pages/NewsItem2';
+// import NewsItem from './pages/NewsItem';
+import NewsItem from './pages/NewsItem2';
 
 function App() {
   return (

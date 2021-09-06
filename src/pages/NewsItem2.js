@@ -12,6 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
+import { getCount } from '../utils/getCount';
 import avatar from '../images/elliot.jpg';
 import { getNewsItem } from '../redux/actions/newsItemActions';
 import { getCommentsList, updateCommentsList } from '../redux/actions/commentsListActions';
@@ -83,15 +84,15 @@ function CommentsContainer({ parent }) {
     if (parent) dispatch(getCommentsList(parent));
   }, [dispatch, parent]);
 
-  React.useEffect(() => {
-    const timerId = setInterval(() => {
-      console.log('update');
-      dispatch(updateCommentsList(parent));
-    }, 10000);
-    return () => {
-      clearInterval(timerId);
-    };
-  }, [dispatch, parent]);
+  // React.useEffect(() => {
+  //   const timerId = setInterval(() => {
+  //     console.log('update');
+  //     dispatch(updateCommentsList(parent));
+  //   }, 10000);
+  //   return () => {
+  //     clearInterval(timerId);
+  //   };
+  // }, [dispatch, parent]);
 
   const handleShowRepliesClick = (id) => () => {
     setShowReplies((state) => ({ ...state, [id]: !state[id] }));
@@ -105,6 +106,8 @@ function CommentsContainer({ parent }) {
 
   const { error, loading, updating, data } = itemComments;
 
+  const count = getCount(data);
+
   return (
     <Segment basic>
       <Button
@@ -114,7 +117,7 @@ function CommentsContainer({ parent }) {
         onClick={handleUpdateCommentsClick}
       />
       <Header as='h3' dividing>
-        Comments
+        Comments ({count})
       </Header>
       {loading ? (
         <Loader active inline='centered' />

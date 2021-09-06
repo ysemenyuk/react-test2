@@ -11,21 +11,6 @@ import {
   COMMENTS_LIST_UPDATE_FAIL,
 } from './types';
 
-const getCount = (comments, res = 0) => {
-  console.log('getCount', comments);
-  if (comments === null || comments.length === null) {
-    return 0;
-  }
-
-  const sum = comments.reduce((acc, i) => {
-    acc += getCount(i.kids, acc);
-    return acc;
-  }, 0);
-
-  console.log('sum', sum);
-  return sum;
-};
-
 const fetchComments = async (ids) => {
   const promises = ids.map(async (id) => await apiService.fetchItem(id));
   const comments = await Promise.all(promises);
@@ -51,9 +36,6 @@ export const getCommentsList = (id) => async (dispatch, getState) => {
     const newsItem = await apiService.fetchItem(id);
     const comments = await fetchComments(newsItem.kids);
     console.log('getCommentsList', comments);
-    const count = getCount(comments);
-
-    console.log(11111, 'count', count);
 
     dispatch({
       type: COMMENTS_LIST_SUCCESS,
