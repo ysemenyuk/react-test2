@@ -40,9 +40,9 @@ export const updateComments = (id) => async (dispatch, getState) => {
       return;
     }
 
-    dispatch(commentsUpdateSucces(id));
+    dispatch(commentsUpdateSucces(id, comments));
   } catch (err) {
-    dispatch(commentsUpdateFail(id));
+    dispatch(commentsUpdateFail(id, err));
   }
 };
 
