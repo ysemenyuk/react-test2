@@ -18,31 +18,22 @@ const getNewsIds = async () => {
 };
 
 export const getNewsList = () => async (dispatch) => {
-  dispatch({
-    type: NEWS_LIST_REQUEST,
-  });
+  dispatch(newsListRequest());
 
   try {
     const respIds = await getNewsIds();
     const promises = respIds.map(async (id) => await apiService.fetchItem(id));
     const newsList = await Promise.all(promises);
 
-    dispatch({
-      type: NEWS_LIST_SUCCESS,
-      payload: newsList,
-    });
+    dispatch(newsListSucces(newsList));
   } catch (err) {
-    dispatch({
-      type: NEWS_LIST_FAIL,
-      payload: err,
-    });
+    dispatch(newsListFail(err));
   }
 };
 
 export const updateNewsList = () => async (dispatch, getState) => {
-  dispatch({
-    type: NEWS_LIST_UPDATE_REQUEST,
-  });
+  dispatch(newsListUpdateRequest());
+
   try {
     const respIds = await getNewsIds();
 
@@ -52,9 +43,7 @@ export const updateNewsList = () => async (dispatch, getState) => {
     const newIds = _.difference(respIds, existIds);
 
     if (newIds.length === 0) {
-      dispatch({
-        type: NEWS_LIST_UPDATE_CANCEL,
-      });
+      dispatch(newsListUpdateCancel());
       return;
     }
 
@@ -63,22 +52,15 @@ export const updateNewsList = () => async (dispatch, getState) => {
 
     const updatedNewsList = [...newNews, ...existNewsList].slice(0, NEWS_ITEMS_LIMIT);
 
-    dispatch({
-      type: NEWS_LIST_UPDATE_SUCCESS,
-      payload: updatedNewsList,
-    });
+    dispatch(newsListUpdateSucces(updatedNewsList));
   } catch (err) {
-    dispatch({
-      type: NEWS_LIST_UPDATE_FAIL,
-      payload: err,
-    });
+    dispatch(newsListUpdateFail(err));
   }
 };
 
 export const updateNewsListWithScore = () => async (dispatch, getState) => {
-  dispatch({
-    type: NEWS_LIST_UPDATE_REQUEST,
-  });
+  dispatch(newsListUpdateRequest());
+
   try {
     const respIds = await getNewsIds();
     const promises = respIds.map(async (id) => await apiService.fetchItem(id));
@@ -89,20 +71,44 @@ export const updateNewsListWithScore = () => async (dispatch, getState) => {
     const eq = _.isEqual(newsList, existNewsList);
 
     if (eq) {
-      dispatch({
-        type: NEWS_LIST_UPDATE_CANCEL,
-      });
+      dispatch(newsListUpdateCancel());
       return;
     }
 
-    dispatch({
-      type: NEWS_LIST_UPDATE_SUCCESS,
-      payload: newsList,
-    });
+    dispatch(newsListUpdateSucces(newsList));
   } catch (err) {
-    dispatch({
-      type: NEWS_LIST_UPDATE_FAIL,
-      payload: err,
-    });
+    dispatch(newsListUpdateFail(err));
   }
 };
+
+const newsListRequest = () => ({
+  type: NEWS_LIST_REQUEST,
+});
+
+const newsListSucces = (data) => ({
+  type: NEWS_LIST_SUCCESS,
+  payload: data,
+});
+
+const newsListFail = (err) => ({
+  type: NEWS_LIST_FAIL,
+  payload: err.message,
+});
+
+const newsListUpdateRequest = () => ({
+  type: NEWS_LIST_UPDATE_REQUEST,
+});
+
+const newsListUpdateCancel = () => ({
+  type: NEWS_LIST_UPDATE_CANCEL,
+});
+
+const newsListUpdateSucces = (data) => ({
+  type: NEWS_LIST_UPDATE_SUCCESS,
+  payload: data,
+});
+
+const newsListUpdateFail = (err) => ({
+  type: NEWS_LIST_UPDATE_FAIL,
+  payload: err.message,
+});

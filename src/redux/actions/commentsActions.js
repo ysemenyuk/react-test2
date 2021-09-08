@@ -1,5 +1,5 @@
-import apiService from '../../sevices/apiService';
 import _ from 'lodash';
+import apiService from '../../sevices/apiService';
 
 import {
   COMMENTS_REQUEST,
@@ -11,34 +11,22 @@ import {
   COMMENTS_UPDATE_FAIL,
 } from './types';
 
-export const getComments = (id) => async (dispatch, getState) => {
-  dispatch({
-    type: COMMENTS_REQUEST,
-    payload: { id },
-  });
+export const getComments = (id) => async (dispatch) => {
+  dispatch(commentsRequest(id));
 
   try {
     const parentItem = await apiService.fetchItem(id);
     const promises = parentItem.kids.map(async (id) => await apiService.fetchItem(id));
     const comments = await Promise.all(promises);
 
-    dispatch({
-      type: COMMENTS_SUCCESS,
-      payload: { id, data: comments },
-    });
+    dispatch(commentsSucces(id, comments));
   } catch (err) {
-    dispatch({
-      type: COMMENTS_FAIL,
-      payload: { id, err },
-    });
+    dispatch(commentsFail(id, err));
   }
 };
 
 export const updateComments = (id) => async (dispatch, getState) => {
-  dispatch({
-    type: COMMENTS_UPDATE_REQUEST,
-    payload: { id },
-  });
+  dispatch(commentsUpdateRequest(id));
 
   try {
     const parentItem = await apiService.fetchItem(id);
@@ -47,24 +35,48 @@ export const updateComments = (id) => async (dispatch, getState) => {
 
     const existComments = getState().comments[id].data;
 
-    const eq = _.isEqual(comments, existComments);
-
-    if (eq) {
-      dispatch({
-        type: COMMENTS_UPDATE_CANCEL,
-        payload: { id },
-      });
+    if (_.isEqual(comments, existComments)) {
+      dispatch(commentsUpdateCancel(id));
       return;
     }
 
-    dispatch({
-      type: COMMENTS_UPDATE_SUCCESS,
-      payload: { id, data: comments },
-    });
+    dispatch(commentsUpdateSucces(id));
   } catch (err) {
-    dispatch({
-      type: COMMENTS_UPDATE_FAIL,
-      payload: { id },
-    });
+    dispatch(commentsUpdateFail(id));
   }
 };
+
+const commentsRequest = (id) => ({
+  type: COMMENTS_REQUEST,
+  payload: { id },
+});
+
+const commentsSucces = (id, data) => ({
+  type: COMMENTS_SUCCESS,
+  payload: { id, data },
+});
+
+const commentsFail = (id, err) => ({
+  type: COMMENTS_FAIL,
+  payload: { id, err },
+});
+
+const commentsUpdateRequest = (id) => ({
+  type: COMMENTS_UPDATE_REQUEST,
+  payload: { id },
+});
+
+const commentsUpdateCancel = (id) => ({
+  type: COMMENTS_UPDATE_CANCEL,
+  payload: { id },
+});
+
+const commentsUpdateSucces = (id, data) => ({
+  type: COMMENTS_UPDATE_SUCCESS,
+  payload: { id, data },
+});
+
+const commentsUpdateFail = (id, err) => ({
+  type: COMMENTS_UPDATE_FAIL,
+  payload: { id, err },
+});

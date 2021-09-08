@@ -4,26 +4,30 @@ import apiService from '../../sevices/apiService';
 import { NEWS_ITEM_REQUEST, NEWS_ITEM_SUCCESS, NEWS_ITEM_FAIL } from './types';
 
 export const getNewsItem = (id) => async (dispatch) => {
-  dispatch({
-    type: NEWS_ITEM_REQUEST,
-  });
+  dispatch(newsItemRequest());
 
   try {
     const item = await apiService.fetchItem(id);
-    dispatch({
-      type: NEWS_ITEM_SUCCESS,
-      payload: item,
-    });
+    dispatch(newsItemSucces(item));
   } catch (err) {
-    dispatch({
-      type: NEWS_ITEM_FAIL,
-      payload: err,
-    });
+    dispatch(newsItemFail(err));
   }
 };
 
-export const resetNewsItem = () => {
-  return {
-    type: 'NEWS_ITEM_RESET',
-  };
-};
+export const resetNewsItem = () => ({
+  type: 'NEWS_ITEM_RESET',
+});
+
+const newsItemRequest = () => ({
+  type: NEWS_ITEM_REQUEST,
+});
+
+const newsItemSucces = (data) => ({
+  type: NEWS_ITEM_SUCCESS,
+  payload: data,
+});
+
+const newsItemFail = (err) => ({
+  type: NEWS_ITEM_FAIL,
+  payload: err.message,
+});
