@@ -8,6 +8,7 @@ function NewsList({ list }) {
       {list.map((item) => {
         if (!item) return null;
         const { id, title, by, time, score, kids } = item;
+
         return (
           <List.Item key={id} as={Link} to={`/news/${id}`}>
             <List.Icon name='newspaper' size='large' verticalAlign='top' />

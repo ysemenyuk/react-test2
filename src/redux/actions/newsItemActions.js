@@ -1,6 +1,4 @@
-// import _ from 'lodash';
 import apiService from '../../sevices/apiService';
-
 import { NEWS_ITEM_REQUEST, NEWS_ITEM_SUCCESS, NEWS_ITEM_FAIL } from './types';
 
 export const getNewsItem = (id) => async (dispatch) => {

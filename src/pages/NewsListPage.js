@@ -1,14 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React, { useEffect } from 'react';
+import _ from 'lodash';
 import { Button, Segment, Container, Loader, Message, Header } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import {
-  getNewsList,
-  updateNewsList,
-  updateNewsListWithScore,
-} from '../redux/actions/newsListActions';
-
+import { getNewsList, updateNewsList, updateNewsListWithScore } from '../redux/actions/newsListActions';
 import NewsList from '../components/NewsList/NewsList';
 import { NEWS_UPDATE_INTERVAL } from '../sevices/constants';
 
@@ -19,14 +13,16 @@ function NewsListPage() {
   const newsList = useSelector(listSelector);
   const { error, loading, updating, data } = newsList;
 
-  React.useEffect(() => {
-    data.length ? dispatch(updateNewsList()) : dispatch(getNewsList());
+  useEffect(() => {
+    _.isEmpty(data) ? dispatch(updateNewsList()) : dispatch(getNewsList());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timerId = setInterval(() => {
       dispatch(updateNewsList());
     }, NEWS_UPDATE_INTERVAL);
+
     return () => {
       clearInterval(timerId);
     };
@@ -43,12 +39,7 @@ function NewsListPage() {
   return (
     <Container>
       <Segment basic>
-        <Button
-          content='Update list diff'
-          primary
-          disabled={loading || updating}
-          onClick={handleUpdateClick}
-        />
+        <Button content='Update list diff' primary disabled={loading || updating} onClick={handleUpdateClick} />
         <Button
           content='Update list full'
           primary
@@ -62,7 +53,7 @@ function NewsListPage() {
         </Header>
         {error && <Message negative content='Error' />}
         {loading && <Loader active inline='centered' />}
-        {!loading && data.length !== 0 && <NewsList list={data} />}
+        {!loading && !_.isEmpty(data) && <NewsList list={data} />}
       </Segment>
     </Container>
   );

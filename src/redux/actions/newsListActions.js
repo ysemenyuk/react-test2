@@ -68,9 +68,9 @@ export const updateNewsListWithScore = () => async (dispatch, getState) => {
 
     const existNewsList = getState().newsList.data;
 
-    const eq = _.isEqual(newsList, existNewsList);
+    const equal = _.isEqual(newsList, existNewsList);
 
-    if (eq) {
+    if (equal) {
       dispatch(newsListUpdateCancel());
       return;
     }

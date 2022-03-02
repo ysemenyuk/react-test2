@@ -1,22 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Segment, Container, Loader, Message } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-
 import { getNewsItem, resetNewsItem } from '../redux/actions/newsItemActions';
-
 import NewsItemDetails from '../components/NesItemDetails/NewsItemDetails';
-import NewsItemCommentsList from '../components/NewsItemCommentsList/NewsItemCommentsList';
 import NewsItemsComments from '../components/NewsItemComments/NewsItemComments';
+
+const newsItemSelector = (state) => state.newsItem;
 
 function NewsItemPage() {
   const dispatch = useDispatch();
   let { id } = useParams();
+  const newsItem = useSelector(newsItemSelector);
 
-  const newsItem = useSelector((state) => state.newsItem);
-
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getNewsItem(id));
+
     return () => {
       dispatch(resetNewsItem());
     };
@@ -39,7 +38,6 @@ function NewsItemPage() {
           <NewsItemDetails item={data} />
         )}
       </Segment>
-      {commentsIds && <NewsItemCommentsList parentId={id} />}
       {commentsIds && <NewsItemsComments parentId={id} />}
     </Container>
   );
